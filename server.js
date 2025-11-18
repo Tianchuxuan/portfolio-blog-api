@@ -20,7 +20,7 @@ const app = express();
 app.use(helmet()); 
 app.use(
   cors({
-    origin: 'https://react-eq9vxp8qp-tianchuxuans-projects.vercel.app/', 
+    origin: 'https://react-eq9vxp8qp-tianchuxuans-projects.vercel.app', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   })
