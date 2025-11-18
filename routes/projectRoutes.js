@@ -10,13 +10,17 @@ const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.route('/')
-  .get(getProjects)
-  .post(protect, createProject);
 
-router.route('/:id')
-  .get(getProject)
-  .put(protect, updateProject)
-  .delete(protect, deleteProject);
+router.get('/', getProjects);
+
+
+router.route('/my-projects')
+  .get(protect, getProjects) 
+  .post(protect, createProject); 
+
+router.route('/my-projects/:id')
+  .get(protect, getProject) 
+  .put(protect, updateProject) 
+  .delete(protect, deleteProject); 
 
 module.exports = router;
