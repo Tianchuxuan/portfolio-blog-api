@@ -19,7 +19,7 @@ app.use(helmet());
 
 // 【核心修复】显式配置 CORS，仅允许前端 Vercel 域名访问
 app.use(cors({
-  origin: "https://react-339u5r7l1-tianchuxuans-projects.vercel.app", // 前端准确域名
+  origin: "https://react-339u5r7li-tianchuxuans-projects.vercel.app", 
   methods: ["GET", "POST", "PUT", "DELETE"], 
   credentials: true, // 允许携带凭证（如 Token、Cookie）
   allowedHeaders: ["Content-Type", "Authorization"] // 允许的请求头
