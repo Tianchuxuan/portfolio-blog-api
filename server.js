@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
 
-
+// 导入路由模块
 const authRoutes = require('./routes/authRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const blogRoutes = require('./routes/blogRoutes');
@@ -14,35 +14,22 @@ const messageRoutes = require('./routes/messageRoutes');
 
 const app = express();
 
-
+// 安全头部中间件（增强 API 安全性）
 app.use(helmet());
 
-
-const allowedOrigins = [
-  'https://react-app-rose-rho.vercel.app',
-  'https://react-app-git-main-tianchuxuans-projects.vercel.app',
-  'https://react-339u5r7l1-tianchuxuans-projects.vercel.app'
-];
-
+// 【核心修复】显式配置 CORS，仅允许前端 Vercel 域名访问
 app.use(cors({
-  origin: function(origin, callback) {
-    
-    if (process.env.NODE_ENV === 'development' || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: "https://react-339u5r7l1-tianchuxuans-projects.vercel.app", // 前端准确域名
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  credentials: true, // 允许携带凭证（如 Token、Cookie）
+  allowedHeaders: ["Content-Type", "Authorization"] // 允许的请求头
 }));
 
-
+// 解析 JSON 和 URL 编码的请求体
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// 根路由（健康检查）
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'Portfolio & Blog API is running',
@@ -51,35 +38,35 @@ app.get('/', (req, res) => {
   });
 });
 
-
+// 注册业务路由
 app.use('/api/users', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/blog/:blogId/comments', commentRoutes);
 app.use('/api/contact', messageRoutes);
 
-
+// 404 路由处理
 app.use((req, res) => {
   res.status(404).json({
     message: `Not Found - ${req.method} ${req.originalUrl}`
   });
 });
 
-
+// 全局错误处理中间件
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   res.status(statusCode).json({
     message: err.message || 'Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }) // 开发环境返回错误栈
   });
 });
 
-
+// MongoDB 数据库连接
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => {
     console.error('MongoDB connection failed:', err.message);
-    process.exit(1);
+    process.exit(1); // 数据库连接失败时退出进程
   });
 
 
