@@ -21,7 +21,7 @@ app.use(helmet());
 const allowedOrigins = [
   'https://react-app-rose-rho.vercel.app',
   'https://react-app-git-main-tianchuxuans-projects.vercel.app',
-  'https://react-eq9vxp8qp-tianchuxuans-projects.vercel.app'
+  'https://react-339u5r7l1-tianchuxuans-projects.vercel.app'
 ];
 
 app.use(cors({
